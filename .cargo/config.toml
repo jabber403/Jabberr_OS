@@ -1,0 +1,16 @@
+[unstable]
+# This tells Cargo to compile the 'core' and 'alloc' libraries from scratch
+build-std = ["core", "compiler_builtins", "alloc"]
+build-std-features = ["compiler-builtins-mem"]
+
+[build]
+# We use the built-in bare metal target to bypass the JSON flag bug
+target = "x86_64-unknown-none"
+
+[target.x86_64-unknown-none]
+# These flags tell the linker how to handle your OS memory
+rustflags = [
+    "-C", "link-arg=-L.",
+    "-C", "link-arg=-Tlinker.ld",
+    "-C", "no-redzone=yes",
+]

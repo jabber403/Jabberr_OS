@@ -1,0 +1,11 @@
+[package]
+name = "Jabberr_OS"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.bootimage]
+test-args = [
+    "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio",
+    "-display", "none"
+]
+test-success-exit-code = 33         # (read as 33/2 = 16)
