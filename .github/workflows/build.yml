@@ -29,12 +29,34 @@ jobs:
         run: |
           mkdir -p iso_root/boot/grub
           cp target/i686-jabberr/debug/Jabberr_OS iso_root/boot/
-          echo 'set timeout=0' > iso_root/boot/grub/grub.cfg
-          echo 'set default=0' >> iso_root/boot/grub/grub.cfg
-          echo 'menuentry "Jabberr OS" {' >> iso_root/boot/grub/grub.cfg
-          echo '    multiboot /boot/Jabberr_OS' >> iso_root/boot/grub/grub.cfg
-          echo '    boot' >> iso_root/boot/grub/grub.cfg
-          echo '}' >> iso_root/boot/grub/grub.cfg
+          
+          # This creates the boot menu file automatically
+          cat <<EOF > iso_root/boot/grub/grub.cfg
+          set timeout=10
+          set default=0
+          
+          # Custom Jabberr OS Colors
+          set menu_color_normal=cyan/blue
+          set menu_color_highlight=white/cyan
+          
+          menuentry "Jabberr OS v1.0" {
+              multiboot /boot/Jabberr_OS
+              boot
+          }
+          
+          menuentry "Jabberr OS (Safe Mode)" {
+              multiboot /boot/Jabberr_OS --safemode
+              boot
+          }
+          
+          menuentry "Reboot" {
+              reboot
+          }
+          
+          menuentry "Power Off" {
+              halt
+          }
+          EOF
 
       - name: Generate ISO File
         run: grub-mkrescue -o jabberr_os.iso iso_root
