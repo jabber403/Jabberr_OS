@@ -1,35 +1,28 @@
-name: Build Jabberr OS ISO
+name: Build Jabberr OS
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@nightly
         with:
           components: rust-src
 
-      - name: Install ISO Tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xorriso grub-pc-bin mtools
+      - name: Install Tools
+        run: sudo apt-get update && sudo apt-get install -y xorriso grub-pc-bin mtools
 
       - name: Build Kernel
         run: cargo build --target i686-jabberr.json -Z build-std=core,compiler_builtins
 
-      - name: Create ISO Structure
+      - name: Setup ISO
         run: |
           mkdir -p iso_root/boot/grub
           cp target/i686-jabberr/debug/Jabberr_OS iso_root/boot/
@@ -40,10 +33,10 @@ jobs:
           echo '    boot' >> iso_root/boot/grub/grub.cfg
           echo '}' >> iso_root/boot/grub/grub.cfg
 
-      - name: Generate ISO
+      - name: Create ISO
         run: grub-mkrescue -o jabberr_os.iso iso_root
 
-      - name: Upload Artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: jabberr-os-iso
