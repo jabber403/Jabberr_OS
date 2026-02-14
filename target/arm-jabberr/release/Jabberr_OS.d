@@ -1,0 +1,1 @@
+C:\Users\howel\Downloads\My\ coding\ stuff\Jabberr_OS_(Raspberry_pi_edition)\target\arm-jabberr\release\Jabberr_OS: C:\Users\howel\Downloads\My\ coding\ stuff\Jabberr_OS_(Raspberry_pi_edition)\src\main.rs

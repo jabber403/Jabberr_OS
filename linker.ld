@@ -1,15 +1,9 @@
 ENTRY(_start)
-
-SECTIONS {
-    . = 1M;
-
-    .rodata : {
-        /* Ensure the multiboot header is at the very beginning */
-        KEEP(*(.multiboot_header))
-        *(.rodata .rodata.*)
-    }
-
-    .text : { *(.text .text.*) }
-    .data : { *(.data .data.*) }
-    .bss  : { *(.bss .bss.*) }
+SECTIONS
+{
+    . = 0x8000;
+    .text : { *(.text.boot) *(.text) }
+    .data : { *(.data) }
+    .bss : { *(.bss) }
+    . = ALIGN(4096);
 }
